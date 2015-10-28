@@ -29,19 +29,31 @@ namespace hpp {
           const std::string& package,
           const std::string& modelName,
           const std::string& urdfSuffix,
-          const std::string& srdfSuffix)
+          const std::string& srdfSuffix) {
+        loadEnvironmentModel (robot, package, modelName, urdfSuffix,
+            std::vector <std::string> (1, srdfSuffix));
+      }
+
+      void loadEnvironmentModel (const DevicePtr_t& robot,
+          const std::string& package,
+          const std::string& modelName,
+          const std::string& urdfSuffix,
+          const std::vector <std::string>& srdfSuffixes)
       {
         hpp::model::urdf::loadUrdfModel (robot, "anchor", package, modelName + urdfSuffix);
 
-        std::string srdfPath = "package://" + package + "/srdf/"
-          + modelName + srdfSuffix + ".srdf";
+        for (std::size_t i = 0; i < srdfSuffixes.size (); ++i) {
+          std::string srdfPath = "package://" + package + "/srdf/"
+            + modelName + srdfSuffixes[i] + ".srdf";
 
-        // Build robot model from URDF.
-        parser::Parser handleParser;
-        // For backward compatibility
-        handleParser.addObjectFactory ("local_position", parser::create <PositionFactory>);
+          // Build robot model from URDF.
+          parser::Parser handleParser;
+          // For backward compatibility
+          handleParser.addObjectFactory
+            ("local_position", parser::create <PositionFactory>);
 
-        handleParser.parse (srdfPath, robot);
+          handleParser.parse (srdfPath, robot);
+        }
         hppDout (notice, "Finished parsing environment contacts.");
       }
 
@@ -52,21 +64,36 @@ namespace hpp {
           const std::string& package,
           const std::string& modelName,
           const std::string& urdfSuffix,
-          const std::string& srdfSuffix)
+          const std::string& srdfSuffix) {
+        loadObjectModel (robot, baseJoint, prefix, rootJointType, package,
+            modelName, urdfSuffix, std::vector <std::string> (1, srdfSuffix));
+      }
+
+      void loadObjectModel (const DevicePtr_t& robot,
+          const model::JointPtr_t& baseJoint,
+          const std::string& prefix,
+          const std::string& rootJointType,
+          const std::string& package,
+          const std::string& modelName,
+          const std::string& urdfSuffix,
+          const std::vector <std::string>& srdfSuffixes)
       {
         hpp::model::urdf::loadRobotModel (robot, baseJoint, prefix,
-            rootJointType, package, modelName, urdfSuffix, srdfSuffix);
+            rootJointType, package, modelName, urdfSuffix, srdfSuffixes[0]);
 
-        std::string srdfPath = "package://" + package + "/srdf/"
-          + modelName + srdfSuffix + ".srdf";
+        for (std::size_t i = 0; i < srdfSuffixes.size (); ++i) {
+          std::string srdfPath = "package://" + package + "/srdf/"
+            + modelName + srdfSuffixes[i] + ".srdf";
 
-        // Build robot model from URDF.
-        parser::Parser handleParser;
-        // For backward compatibility
-        handleParser.addObjectFactory ("local_position", parser::create <PositionFactory>);
+          // Build robot model from URDF.
+          parser::Parser handleParser;
+          // For backward compatibility
+          handleParser.addObjectFactory ("local_position",
+              parser::create <PositionFactory>);
 
-        handleParser.prefix (prefix);
-        handleParser.parse (srdfPath, robot);
+          handleParser.prefix (prefix);
+          handleParser.parse (srdfPath, robot);
+        }
         hppDout (notice, "Finished parsing handles.");
       }
 
@@ -77,21 +104,36 @@ namespace hpp {
           const std::string& package,
           const std::string& modelName,
           const std::string& urdfSuffix,
-          const std::string& srdfSuffix)
+          const std::string& srdfSuffix) {
+        loadHumanoidModel (robot, baseJoint, prefix, rootJointType, package,
+            modelName, urdfSuffix, std::vector <std::string> (1, srdfSuffix));
+      }
+
+      void loadHumanoidModel (const DevicePtr_t& robot,
+          const model::JointPtr_t& baseJoint,
+          const std::string& prefix,
+          const std::string& rootJointType,
+          const std::string& package,
+          const std::string& modelName,
+          const std::string& urdfSuffix,
+          const std::vector <std::string>& srdfSuffixes)
       {
         hpp::model::urdf::loadHumanoidModel (robot, baseJoint, prefix,
-            rootJointType, package, modelName, urdfSuffix, srdfSuffix);
+            rootJointType, package, modelName, urdfSuffix, srdfSuffixes[0]);
 
-        std::string srdfPath = "package://" + package + "/srdf/"
-          + modelName + srdfSuffix + ".srdf";
+        for (std::size_t i = 0; i < srdfSuffixes.size (); ++i) {
+          std::string srdfPath = "package://" + package + "/srdf/"
+            + modelName + srdfSuffixes[i] + ".srdf";
 
-        // Build robot model from URDF.
-        parser::Parser gripperParser;
-        // For backward compatibility
-        gripperParser.addObjectFactory ("handle_position_in_joint", parser::create <PositionFactory>);
+          // Build robot model from URDF.
+          parser::Parser gripperParser;
+          // For backward compatibility
+          gripperParser.addObjectFactory ("handle_position_in_joint",
+              parser::create <PositionFactory>);
 
-        gripperParser.prefix (prefix);
-        gripperParser.parse (srdfPath, robot);
+          gripperParser.prefix (prefix);
+          gripperParser.parse (srdfPath, robot);
+        }
         hppDout (notice, "Finished parsing grippers.");
       }
 
@@ -102,21 +144,36 @@ namespace hpp {
           const std::string& package,
           const std::string& modelName,
           const std::string& urdfSuffix,
-          const std::string& srdfSuffix)
+          const std::string& srdfSuffix) {
+        loadRobotModel (robot, baseJoint, prefix, rootJointType, package,
+            modelName, urdfSuffix, std::vector <std::string> (1, srdfSuffix));
+      }
+
+      void loadRobotModel (const DevicePtr_t& robot,
+          const model::JointPtr_t& baseJoint,
+          const std::string& prefix,
+          const std::string& rootJointType,
+          const std::string& package,
+          const std::string& modelName,
+          const std::string& urdfSuffix,
+          const std::vector<std::string>& srdfSuffixes)
       {
         hpp::model::urdf::loadRobotModel (robot, baseJoint, prefix,
-            rootJointType, package, modelName, urdfSuffix, srdfSuffix);
+            rootJointType, package, modelName, urdfSuffix, srdfSuffixes[0]);
 
-        std::string srdfPath = "package://" + package + "/srdf/"
-          + modelName + srdfSuffix + ".srdf";
+        for (std::size_t i = 0; i < srdfSuffixes.size (); ++i) {
+          std::string srdfPath = "package://" + package + "/srdf/"
+            + modelName + srdfSuffixes[i] + ".srdf";
 
-        // Build robot model from URDF.
-        parser::Parser gripperParser;
-        // For backward compatibility
-        gripperParser.addObjectFactory ("handle_position_in_joint", parser::create <PositionFactory>);
+          // Build robot model from URDF.
+          parser::Parser gripperParser;
+          // For backward compatibility
+          gripperParser.addObjectFactory ("handle_position_in_joint",
+              parser::create <PositionFactory>);
 
-        gripperParser.prefix (prefix);
-        gripperParser.parse (srdfPath, robot);
+          gripperParser.prefix (prefix);
+          gripperParser.parse (srdfPath, robot);
+        }
         hppDout (notice, "Finished parsing grippers.");
       }
     } // namespace srdf

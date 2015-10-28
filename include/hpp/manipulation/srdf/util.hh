@@ -32,6 +32,12 @@ namespace hpp {
           const std::string& package,
           const std::string& modelName,
           const std::string& urdfSuffix,
+          const std::vector<std::string>& srdfSuffixes);
+
+      void loadEnvironmentModel (const DevicePtr_t& robot,
+          const std::string& package,
+          const std::string& modelName,
+          const std::string& urdfSuffix,
           const std::string& srdfSuffix);
 
       /// \note This function reads the following files:
@@ -39,6 +45,15 @@ namespace hpp {
       /// package://${modelName}_description/urdf/${modelName}${urdfSuffix}.urdf
       /// \li
       /// package://${modelName}_description/srdf/${modelName}${srdfSuffix}.srdf
+      void loadObjectModel (const DevicePtr_t& robot,
+          const model::JointPtr_t& baseJoint,
+          const std::string& prefix,
+          const std::string& rootJointType,
+          const std::string& package,
+          const std::string& modelName,
+          const std::string& urdfSuffix,
+          const std::vector <std::string>& srdfSuffixes);
+
       void loadObjectModel (const DevicePtr_t& robot,
           const model::JointPtr_t& baseJoint,
           const std::string& prefix,
@@ -60,6 +75,15 @@ namespace hpp {
           const std::string& package,
           const std::string& modelName,
           const std::string& urdfSuffix,
+          const std::vector <std::string>& srdfSuffixes);
+
+      void loadHumanoidModel (const DevicePtr_t& robot,
+          const model::JointPtr_t& baseJoint,
+          const std::string& prefix,
+          const std::string& rootJointType,
+          const std::string& package,
+          const std::string& modelName,
+          const std::string& urdfSuffix,
           const std::string& srdfSuffix);
 
       /// \note This function reads the following files:
@@ -67,6 +91,15 @@ namespace hpp {
       /// package://${modelName}_description/urdf/${modelName}${urdfSuffix}.urdf
       /// \li
       /// package://${modelName}_description/srdf/${modelName}${srdfSuffix}.srdf
+      void loadRobotModel (const DevicePtr_t& robot,
+          const model::JointPtr_t& baseJoint,
+          const std::string& prefix,
+          const std::string& rootJointType,
+          const std::string& package,
+          const std::string& modelName,
+          const std::string& urdfSuffix,
+          const std::vector <std::string>& srdfSuffixes);
+
       void loadRobotModel (const DevicePtr_t& robot,
           const model::JointPtr_t& baseJoint,
           const std::string& prefix,
