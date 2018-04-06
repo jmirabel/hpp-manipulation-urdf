@@ -21,7 +21,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 SET(CXX_DISABLE_WERROR TRUE)
 INCLUDE(cmake/base.cmake)
-INCLUDE(cmake/cpack.cmake)
+INCLUDE(cmake/python.cmake)
 
 SET(PROJECT_NAME hpp-manipulation-urdf)
 SET(PROJECT_DESCRIPTION "Implementation of a parser for hpp-manipulation.")
@@ -50,6 +50,7 @@ SET(${PROJECT_NAME}_HEADERS
   include/hpp/manipulation/srdf/factories/robot.hh
   )
 
+FINDPYTHON()
 ADD_REQUIRED_DEPENDENCY("tinyxml >= 2.6")
 ADD_REQUIRED_DEPENDENCY("hpp-util >= 3.2")
 ADD_REQUIRED_DEPENDENCY("hpp-manipulation >= 4")
@@ -62,4 +63,3 @@ ADD_SUBDIRECTORY(tests)
 PKG_CONFIG_APPEND_LIBS (${PROJECT_NAME})
 
 SETUP_PROJECT_FINALIZE()
-SETUP_PROJECT_CPACK()

@@ -40,3 +40,7 @@ PKG_CONFIG_USE_DEPENDENCY(${LIBRARY_NAME} hpp-manipulation)
 PKG_CONFIG_USE_DEPENDENCY(${LIBRARY_NAME} pinocchio)
 
 INSTALL(TARGETS ${LIBRARY_NAME} DESTINATION lib)
+
+PYTHON_INSTALL_ON_SITE("hpp/manipulation"      "__init__.py")
+PYTHON_INSTALL_ON_SITE("hpp/manipulation/urdf" "__init__.py")
+PYTHON_INSTALL_ON_SITE("hpp/manipulation/urdf" "parser.py")
