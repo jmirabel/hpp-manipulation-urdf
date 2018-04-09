@@ -20,7 +20,7 @@ def _read_mask (xml):
 
 def _read_joints (xml):
     jointTags = xml.findall('joint')
-    return tuple ( [ jt.attribute["name"] for jt in jointTags ] )
+    return tuple ( [ jt.attrib["name"] for jt in jointTags ] )
 
 def _read_position (xml):
     positionsTag = xml.findall('position')
@@ -34,34 +34,47 @@ def _read_link (xml):
         raise ValueError ("Gripper needs exactly one tag link")
     return str(linksTag[0].attrib['name'])
 
-def parse_srdf (packageName, srdf):
-    from rospkg import RosPack
+def parse_srdf (srdf, packageName = None, prefix = None):
+    """
+    parameters:
+    - packageName: if provided, the filename is considered relative to this ROS package
+    - prefix: if provided, the name of the elements will be prepended with
+             prefix + "/"
+    """
     import os
-    rospack = RosPack()
-    path = rospack.get_path(packageName)
-    srdfFn = os.path.join(path, "srdf", srdf)
+    if packageName is not None:
+        from rospkg import RosPack
+        rospack = RosPack()
+        path = rospack.get_path(packageName)
+        srdfFn = os.path.join(path, srdf)
+    else:
+        srdfFn = srdf
 
     # tree = ET.fromstring (srdfFn)
     tree = ET.parse (srdfFn)
     root = tree.getroot()
 
-    grippers = []
+    grippers = {}
     for xml in root.iter('gripper'):
-        g = { "name":      _read_name (xml),
+        n = _read_name (xml)
+        g = { "robot":     prefix,
+              "name":      n,
               "clearance": _read_clearance (xml),
               "link":      _read_link (xml),
               "position":  _read_position (xml),
               "joints":    _read_joints (xml),
               }
-        grippers.append (g)
+        grippers[ prefix + "/" + n if prefix is not None else n] = g
 
-    handles = []
+    handles = {}
     for xml in root.iter('handle'):
-        h = { "name":      _read_name (xml),
+        n = _read_name (xml)
+        h = { "robot":     prefix,
+              "name":      n,
               "clearance": _read_clearance (xml),
               "link":      _read_link (xml),
               "position":  _read_position (xml),
               "mask":      _read_mask (xml),
               }
-        handles.append (h)
-    return grippers, handles
+        handles[ prefix + "/" + n if prefix is not None else n] = h
+    return { "grippers": grippers, "handles": handles}
